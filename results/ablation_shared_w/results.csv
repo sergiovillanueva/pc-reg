@@ -1,0 +1,11 @@
+timestamp;category;method;auroc_combined;auroc_logical;auroc_structural
+2026-03-03T09:32:44.399705;breakfast_box;per_position;0.8303;0.8951;0.7705
+2026-03-03T09:33:59.836543;breakfast_box;shared_W;0.7718;0.8101;0.7366
+2026-03-03T09:35:49.707147;juice_bottle;per_position;0.9505;0.9583;0.9388
+2026-03-03T09:37:05.717588;juice_bottle;shared_W;0.8901;0.9080;0.8632
+2026-03-03T09:38:56.993381;pushpins;per_position;0.7010;0.6811;0.7234
+2026-03-03T09:40:14.436775;pushpins;shared_W;0.6467;0.5776;0.7244
+2026-03-03T09:42:12.924243;screw_bag;per_position;0.7383;0.6784;0.8384
+2026-03-03T09:43:42.174585;screw_bag;shared_W;0.7479;0.6920;0.8413
+2026-03-03T09:45:33.441860;splicing_connectors;per_position;0.7957;0.8206;0.7641
+2026-03-03T09:46:52.985150;splicing_connectors;shared_W;0.7088;0.7358;0.6744

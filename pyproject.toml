@@ -1,0 +1,18 @@
+[project]
+name = "pc-reg"
+version = "1.0.0"
+description = "PC-Reg: Modeling Spatial Dependencies for Training-Free Anomaly Detection"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "torch",
+    "torchvision",
+    "transformers>=4.50",
+    "scikit-learn",
+    "scikit-image",
+    "scipy",
+    "numpy",
+    "pandas",
+    "matplotlib",
+    "Pillow",
+]

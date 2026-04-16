@@ -1,0 +1,26 @@
+# Data (too large for git)
+data/
+features/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.venv/
+venv/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+errors.log
+
+# UV
+uv.lock
