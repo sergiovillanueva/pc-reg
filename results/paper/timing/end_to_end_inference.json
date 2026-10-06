@@ -1,0 +1,145 @@
+{
+  "device": "NVIDIA GeForce RTX 3080 Ti Laptop GPU",
+  "warmup": 10,
+  "iters": 100,
+  "backbones": {
+    "vitL": {
+      "backbone": "vitL",
+      "model": "facebook/dinov3-vitl16-pretrain-lvd1689m",
+      "full_fp16_features": {
+        "mean_ms": 42.72940800001379,
+        "std_ms": 4.2366525314068,
+        "median_ms": 41.38565000175731,
+        "p95_ms": 51.369449995399904,
+        "n": 100
+      },
+      "trunc_nkeep18_cos_vs_full": 0.8719065069993577,
+      "trunc_nkeep19_cos_vs_full": 1.0,
+      "n_keep": 19,
+      "n_layers": 24,
+      "trunc_fp16_features": {
+        "mean_ms": 33.97933399959584,
+        "std_ms": 2.7141502323180293,
+        "median_ms": 33.098099993367214,
+        "p95_ms": 39.61512500536628,
+        "n": 100
+      },
+      "trunc_fp16_features_cls": {
+        "mean_ms": 34.310187999362824,
+        "std_ms": 4.055641359303321,
+        "median_ms": 32.79235000081826,
+        "p95_ms": 44.2206149957201,
+        "n": 100
+      },
+      "val_finite": true,
+      "val_n_images": 16,
+      "val_feat_cosine_vs_cache": 1.0,
+      "val_cls_pearson_mean": 0.9999275657778401,
+      "val_cls_pearson_min": 0.9997548119767767,
+      "val_cls_max_abs_diff": 0.00028348062187433243,
+      "val_cls_mean_abs_diff": 1.7956938336283201e-06,
+      "val_cls_mean_value": 0.0005360933137126267,
+      "full_fp32_eager_attn": {
+        "mean_ms": 95.92998499938403,
+        "std_ms": 4.891571466223716,
+        "median_ms": 95.74140000040643,
+        "p95_ms": 100.66634000104388,
+        "n": 20
+      },
+      "cpu": {
+        "fit_cls_seconds": 96.36325335502625,
+        "pca_transform": {
+          "mean_ms": 2.0809809997444972,
+          "std_ms": 0.19135956669686363,
+          "median_ms": 2.063200001430232,
+          "p95_ms": 2.44180000590859,
+          "n": 100
+        },
+        "score_cls_batched_torch": {
+          "mean_ms": 20.351531999767758,
+          "std_ms": 0.9235658532596769,
+          "median_ms": 20.304149998992216,
+          "p95_ms": 21.64192998970975,
+          "n": 100
+        },
+        "gap_maha": {
+          "mean_ms": 0.18594800028949976,
+          "std_ms": 0.0625635819545858,
+          "median_ms": 0.1730499934637919,
+          "p95_ms": 0.23011998928268437,
+          "n": 100
+        }
+      },
+      "end_to_end_dual_ms": 55.3327499947045
+    },
+    "vitH": {
+      "backbone": "vitH",
+      "model": "facebook/dinov3-vith16plus-pretrain-lvd1689m",
+      "full_fp16_features": {
+        "mean_ms": 102.1731899997394,
+        "std_ms": 3.1612527317456993,
+        "median_ms": 101.81479999300791,
+        "p95_ms": 108.77846500079613,
+        "n": 100
+      },
+      "trunc_nkeep26_cos_vs_full": 0.9370679967366172,
+      "trunc_nkeep27_cos_vs_full": 1.0,
+      "n_keep": 27,
+      "n_layers": 32,
+      "trunc_fp16_features": {
+        "mean_ms": 86.75308299963945,
+        "std_ms": 3.305812439637156,
+        "median_ms": 86.31159999640658,
+        "p95_ms": 91.8441349909699,
+        "n": 100
+      },
+      "trunc_fp16_features_cls": {
+        "mean_ms": 89.08927799930098,
+        "std_ms": 4.397211053499914,
+        "median_ms": 87.85085000272375,
+        "p95_ms": 97.8131649972056,
+        "n": 100
+      },
+      "val_finite": true,
+      "val_n_images": 16,
+      "val_feat_cosine_vs_cache": 0.9999973410328062,
+      "val_cls_pearson_mean": 0.9999848215962635,
+      "val_cls_pearson_min": 0.9999572469168616,
+      "val_cls_max_abs_diff": 0.00016091950237751007,
+      "val_cls_mean_abs_diff": 1.2826127431253553e-06,
+      "val_cls_mean_value": 0.0004586754075717181,
+      "full_fp32_eager_attn": {
+        "mean_ms": 319.8263250000309,
+        "std_ms": 21.481586222882758,
+        "median_ms": 308.080599992536,
+        "p95_ms": 362.603500008845,
+        "n": 20
+      },
+      "cpu": {
+        "fit_cls_seconds": 218.1930193901062,
+        "pca_transform": {
+          "mean_ms": 5.6367999997746665,
+          "std_ms": 1.056020165999824,
+          "median_ms": 5.766300004324876,
+          "p95_ms": 7.237529994017677,
+          "n": 100
+        },
+        "score_cls_batched_torch": {
+          "mean_ms": 39.2759099995601,
+          "std_ms": 7.756207743107588,
+          "median_ms": 37.06054999202024,
+          "p95_ms": 63.06819999299478,
+          "n": 100
+        },
+        "gap_maha": {
+          "mean_ms": 0.5090550005843397,
+          "std_ms": 0.6191334205192291,
+          "median_ms": 0.2984999955515377,
+          "p95_ms": 2.1297850005794303,
+          "n": 100
+        }
+      },
+      "end_to_end_dual_ms": 130.9761999946204
+    }
+  }
+}
