@@ -1,161 +1,137 @@
-# PC-Reg: Modeling Spatial Dependencies for Training-Free Anomaly Detection
+# PC-Reg: Modeling Spatial Dependencies for Logical Anomaly Detection
 
-This repository contains the code and results for reproducing the experiments in our paper.
+Code and results of the paper
 
-## Method
+> S. Villanueva López, E. Soria-Olivas, M. Sánchez-Montañés. *PC-Reg: Modeling Spatial Dependencies for
+> Logical Anomaly Detection.* Submitted to *Electronics* (MDPI), 2026.
 
-PC-Reg detects logical and structural anomalies in industrial images by modeling spatial dependencies between patch features. For each position in a 28x28 feature grid (extracted from DINOv3-ViT-L/16), we fit a closed-form Ridge regression that predicts the center patch from its spatial neighbors. Anomalies are scored via the Mahalanobis distance of the prediction residual.
+PC-Reg learns from defect-free images how each region of an image relates to its surroundings. A frozen
+DINOv3 backbone provides the patch features; at every position of the feature grid, a closed-form ridge
+regression predicts the patch feature from its attention-weighted neighbors, and the Mahalanobis distance of
+the residual, standardized per position, measures how far the region departs from its expected context. A
+second branch scores the mean features of the four image quadrants. Every parameter is fitted in closed form
+(PCA, ridge regression, Ledoit-Wolf covariances); there is no gradient-based training, and the output is
+deterministic.
 
-The method is **training-free**: no gradient-based optimization is required. The entire pipeline (PCA + Ridge regression + Ledoit-Wolf covariance) runs in closed form.
-
-**PC-Reg_CLS** extends this by weighting neighbor contributions using the CLS-to-patch attention from DINOv3 (layer -6), which improves detection on 26 of 32 categories across three benchmarks.
+![PC-Reg_Dual pipeline](docs/pipeline.png)
 
 ## Results
 
-| Dataset | Categories | PC-Reg | PC-Reg_CLS |
-|---------|-----------|--------|------------|
-| MVTec LOCO AD | 5 | 80.3% | **83.5%** |
-| MVTec AD | 15 | 96.4% | **98.4%** |
-| VisA | 12 | 86.1% | **89.6%** |
+Image AUROC (%), one fixed configuration for all categories, all methods on the same DINOv3 features and PCA
+(Table 1 of the paper). LOCO: MVTec LOCO AD (combined, logical, structural); All 32: MVTec LOCO AD + MVTec AD + VisA.
 
-Image-level AUROC (%), single fixed configuration across all categories.
+| Method (ViT-L/16) | LOCO | LOCO log. | LOCO str. | MVTec AD | VisA | All 32 | BTAD |
+|---|---|---|---|---|---|---|---|
+| PatchCore (P95) | 75.4 | 74.4 | 77.9 | 95.5 | 86.5 | 89.0 | 95.8 |
+| PatchCore (max) | 80.4 | 70.4 | 93.6 | 98.7 | 97.7 | 95.5 | 95.5 |
+| PaDiM | 74.1 | 73.2 | 75.6 | 94.5 | 85.2 | 87.8 | 97.0 |
+| MeanSub | 75.0 | 74.7 | 75.7 | 94.1 | 85.0 | 87.7 | 96.9 |
+| PC-Reg | 81.0 | 82.1 | 80.6 | 96.6 | 87.6 | 90.8 | 97.4 |
+| PC-Reg_CLS | 85.3 | 82.8 | 89.2 | 99.0 | 91.6 | 94.1 | 95.8 |
+| **PC-Reg_Dual** | **85.7** | **85.0** | 87.4 | 98.8 | 92.6 | 94.4 | 96.3 |
+| PC-Reg_Dual (ViT-H+/16) | 87.5 | 88.1 | 87.6 | 99.0 | 93.5 | 95.2 | |
+
+On logical anomalies, PC-Reg_Dual is above PatchCore in all five MVTec LOCO AD categories:
+
+![Logical anomaly AUROC per category](docs/logical_per_category.png)
+
+## What can be checked here
+
+| Paper | Script | Result file (as reported) |
+|---|---|---|
+| Table 1, Tables A1-A3 (per category), Wilcoxon tests | `scripts/run_main.py` | `results/paper/percat.csv`, `results/paper/wilcoxon.json` |
+| Table 2 (components), Table A5 (fusion weight) | `scripts/run_main.py` | `results/paper/percat.csv` (variant rows) |
+| Table 3 (feature-space perturbation tests) | research code | `results/paper/perturbation.csv` |
+| Table 5 and Section 5.5 (inference time) | research code | `results/paper/timing/` |
+| Table A4 (design study) | research code | `results/paper/ablation_*.csv` |
+| Table A6, Figure A1 (few training images) | research code | `results/paper/fewshot.csv` |
+| Table A8 (pixel AUROC, AUPRO) | research code | `results/paper/localization.csv` |
+
+`python scripts/make_tables.py` prints Tables 1, 2, 3, A1-A3, A5 and A6 from these files, and
+`python scripts/make_tables.py --compare` compares a fresh run of `scripts/run_main.py` (`results/reproduced/`) with them.
+
+The method names in `percat.csv` are: `dual_final` (PC-Reg_Dual), `cls_cal` (PC-Reg_CLS), `uniform_cal`
+(PC-Reg), `padim_cal`, `meansub_cal`, `patchcore_max`, `patchcore_p95`; the suffix `_raw` marks the variants
+without the per-position standardization, `quad` and `gap` are the quadrant and global-mean scores alone, and
+the other `dual_*` rows are the fusion variants of Tables 2 and A5.
+
+**Reproduction check.** On the cached features of the paper, the reference implementation in `pcreg/` gives the
+AUROC of `results/paper/percat.csv` for all 22 methods and variants of MVTec LOCO AD breakfast_box to within
+0.03 points (the original runs stored intermediate distance maps in float16), and `scripts/extract_features.py`
+reproduces the cached patch tokens (cosine similarity at least 0.9999) and CLS attention.
 
 ## Setup
 
-We use [uv](https://docs.astral.sh/uv/) for dependency management. Install it first, then:
+Python 3.11 or later. Tested with PyTorch 2.7.1, transformers 4.57.3, scikit-learn 1.8.0 and NumPy 2.4.3.
 
 ```bash
-uv sync
+pip install -e .            # or: uv sync
 ```
 
-By default this installs CPU-compatible PyTorch wheels. If you want a specific CUDA build, install PyTorch following the official instructions for your platform.
+A CUDA GPU is needed only to extract the features (ViT-L/16: about 12 GB of memory; ViT-H+/16: 16 GB) and
+speeds up the nearest-neighbor search of PatchCore. Everything else runs on a CPU.
 
 ### Datasets
 
-Download and place the datasets under `data/`:
+Download the datasets from their original sources and place them under `data/`:
 
 ```
 data/
-  mvtec_loco_AD/    # MVTec LOCO AD (5 categories)
-  mvtec_AD/         # MVTec AD (15 categories)
-  VisA/             # VisA (12 categories, with split_csv/1cls.csv)
+  mvtec_loco_AD/   https://www.mvtec.com/company/research/datasets/mvtec-loco
+  mvtec_AD/        https://www.mvtec.com/company/research/datasets/mvtec-ad
+  VisA/            https://github.com/amazon-science/spot-diff   (with split_csv/1cls.csv, one-class split)
+  btad/            https://github.com/pankajmishra000/VT-ADL     (01, 02, 03)
 ```
 
-- [MVTec LOCO AD](https://www.mvtec.com/company/research/datasets/mvtec-loco)
-- [MVTec AD](https://www.mvtec.com/company/research/datasets/mvtec-ad)
-- [VisA](https://github.com/amazon-science/spot-diff)
-
-## Reproducing the experiments
-
-### Step 1: Extract features (GPU)
-
-Extract DINOv3-ViT-L/16 patch features and cache them to disk. This only needs to be done once.
+## Running
 
 ```bash
-uv run scripts/extract_features_loco.py
-uv run scripts/extract_features_mvtec.py
-uv run scripts/extract_features_visa.py
+# 1. features: DINOv3 patch tokens and CLS attention of layer -6 (GPU, once per dataset)
+python scripts/extract_features.py --dataset all                    # ViT-L/16, 448 x 448
+python scripts/extract_features.py --dataset loco --backbone vitH   # optional ViT-H+/16, 512 x 512
+
+# 2. detectors and baselines (CPU, resumable per category)
+python scripts/run_main.py                                          # Tables 1, 2, A1-A3, A5
+python scripts/run_main.py --backbone vitH --datasets loco mvtec visa
+
+# 3. tables
+python scripts/make_tables.py --source reproduced
+python scripts/make_tables.py --compare
 ```
 
-Features are saved under `features/`. Requires a GPU with at least 12 GB VRAM.
+`scripts/run_main.py` computes PC-Reg, PC-Reg_CLS, PC-Reg_Dual and the baselines for one category in a few
+minutes on a desktop CPU. Fitting PC-Reg_Dual alone takes about two minutes per category.
 
-### Step 2: Run experiments (CPU + GPU for attention)
-
-All experiment scripts load pre-cached features and run on CPU only, except the CLS-gating scripts which extract attention maps on GPU during their first run.
-
-**PC-Reg on LOCO (main ablation):**
-```bash
-uv run scripts/run_pcreg_loco.py            # PC-Reg on LOCO
-```
-
-**PC-Reg_CLS on all three datasets:**
-```bash
-uv run scripts/run_pcreg_cls_loco.py         # PC-Reg + CLS-gating on LOCO
-uv run scripts/run_pcreg_cls_mvtec.py        # PC-Reg + CLS-gating on MVTec AD
-uv run scripts/run_pcreg_cls_visa.py         # PC-Reg + CLS-gating on VisA
-```
-
-The CLS scripts automatically extract and cache DINOv3 attention maps on the first run (requires GPU). Subsequent runs use cached attention and run on CPU only.
-
-**Fair comparison:**
-```bash
-uv run scripts/run_fair_comparison.py        # PatchCore, PaDiM, MeanSub, PC-Reg
-```
-
-**Permutation test:**
-```bash
-uv run scripts/run_permutation_test.py       # PatchCore vs PC-Reg on synthetic permutations
-```
-
-**Pixel-level metrics:**
-```bash
-uv run scripts/run_pixel_metrics.py          # pixel-AUROC and AUPRO
-```
-
-**Statistical tests:**
-```bash
-uv run scripts/run_statistical_tests.py      # Wilcoxon signed-rank + Cliff's delta
-```
-
-**Complexity benchmark:**
-```bash
-uv run scripts/run_benchmark.py              # Pipeline timing (GPU + CPU)
-```
-
-### Step 3: Generate figures
-
-Note: `generate_heatmaps.py` requires the LOCO attention cache from `run_pcreg_cls_loco.py`.
-
-```bash
-uv run scripts/generate_acid_figure.py       # Permutation test diagram
-uv run scripts/generate_heatmaps.py          # Anomaly localization heatmaps
-```
-
-If datasets/features are not present, the figure scripts print a short message and skip instead of crashing.
-
-## Repository structure
+## Code
 
 ```
-pc-reg/
-  scripts/
-    extract_features_loco.py     Feature extraction for LOCO (GPU, one-time)
-    extract_features_mvtec.py    Feature extraction for MVTec AD (GPU, one-time)
-    extract_features_visa.py     Feature extraction for VisA (GPU, one-time)
-    run_pcreg_loco.py            PC-Reg on MVTec LOCO AD
-    run_pcreg_cls_loco.py        PC-Reg + CLS-gating on LOCO
-    run_pcreg_cls_mvtec.py       PC-Reg + CLS-gating on MVTec AD
-    run_pcreg_cls_visa.py        PC-Reg + CLS-gating on VisA
-    run_fair_comparison.py       Controlled comparison (4 methods, 3 datasets)
-    run_permutation_test.py      Synthetic permutation test
-    run_pixel_metrics.py         Pixel-level AUROC and AUPRO
-    run_statistical_tests.py     Wilcoxon + Cliff's delta
-    run_benchmark.py             Computational complexity analysis
-    generate_acid_figure.py      Permutation test diagram
-    generate_heatmaps.py         Anomaly localization heatmaps
-  results/                       Pre-computed results (CSV/JSON)
-  pyproject.toml                 Dependencies
+pcreg/
+  config.py     fixed configuration: layer -6, d = 256, R = 5, lambda = 1, P95, alpha = 0.5
+  data.py       image lists per dataset and split; loading of the cached features
+  features.py   DINOv3 patch tokens and head-averaged CLS-to-patch attention
+  models.py     PCReg (uniform or CLS context), QuadrantScore, PCRegDual, PaDiM / MeanSub
+                (PerPositionGaussian), PatchCore (exact k = 1), AUROC
+scripts/        feature extraction, run_main.py (all detectors), make_tables.py
+results/paper/  the result files behind the tables of the paper
 ```
 
-## Pre-computed results
+Minimal use of the detector on cached features:
 
-The `results/` directory contains all experimental results as CSV files, so the numbers in the paper can be verified without re-running the experiments. All scripts are resumable: they skip already-completed runs.
+```python
+from pcreg import PCRegDual, fit_pca, project
+from pcreg.data import load_category
 
-## Hardware
-
-Experiments were run on:
-- CPU: Intel Core i9
-- GPU: NVIDIA RTX 4070 Ti (16 GB)
-- RAM: 32 GB
-
-Feature extraction requires GPU. All other experiments (Ridge regression, scoring, ablations) run on CPU in minutes.
+feats, attn = load_category("loco", "breakfast_box")
+pca = fit_pca(feats["train"])
+model = PCRegDual(grid=28).fit(project(pca, feats["train"]), attn["train"])
+scores = model.score(project(pca, feats["test_logical"]), attn["test_logical"])
+```
 
 ## Configuration
 
-All experiments use a single fixed configuration unless stated otherwise:
-- Backbone: DINOv3-ViT-L/16, layer -6, resolution 448x448
-- PCA: d=256, random_state=42
-- Ridge: R=5, lambda=1.0
-- Aggregation: 95th percentile
-- Covariance: Ledoit-Wolf shrinkage
+One configuration for every category and dataset: DINOv3-ViT-L/16 at 448 x 448 (28 x 28 grid), patch tokens and
+CLS attention of layer -6, PCA to d = 256 (fitted on the training patches), Chebyshev radius R = 5, ridge
+penalty lambda = 1, Ledoit-Wolf covariances, 95th percentile over positions, equal-weight fusion (alpha = 0.5)
+with z-statistics from the training scores. The optional ViT-H+/16 uses 512 x 512 inputs (32 x 32 grid).
 
-The pipeline is fully deterministic.
+The experiments of the paper ran on an Intel Core i9 CPU with 32 GB RAM and an NVIDIA RTX 3080 Ti laptop GPU (16 GB).

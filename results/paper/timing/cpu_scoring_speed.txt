@@ -1,0 +1,30 @@
+L1-036b Speed Benchmark (warmup=10, iters=100)
+Device: cuda:0
+Numba: YES
+
+Label                                             mean    std      med      p95
+---------------------------------------------------------------------------
+vitL_full_fp16 B=1                               42.18   1.16    42.19    43.63
+vitL_full_fp16 B=8                               28.10   0.92    28.67    28.87
+vitL_full_fp16 B=16                              26.61   0.85    26.99    27.51
+vitL_trunc_fp16 B=1                              23.32   0.56    23.35    24.14
+vitL_trunc_fp16 B=8                              16.16   0.07    16.16    16.28
+vitL_trunc_fp16 B=16                             15.81   0.57    16.28    16.38
+vitH+_full_fp16 B=1                             108.47   1.22   108.65   110.08
+vitH+_full_fp16 B=8                              92.51   1.25    93.07    93.68
+vitH+_full_fp16 B=16                             91.06   1.92    90.57    95.00
+vitH+_trunc_fp16 B=1                             69.87   1.22    69.83    72.24
+vitH+_trunc_fp16 B=8                             67.70   0.12    67.70    67.91
+vitH+_trunc_fp16 B=16                            68.60   5.67    66.41    69.76
+vitL_pca_transform                                2.14   0.24     2.10     2.62
+vitL_score_loop_numpy                            35.48   1.25    35.23    38.07
+vitL_score_loop_torch                           287.20  19.17   292.83   317.50
+vitL_score_batched_torch                         15.26   0.48    15.25    16.01
+vitL_score_numba_jit                             54.32   4.00    54.29    56.87
+vitL_gap_maha                                     0.03   0.01     0.03     0.03
+vitH+_pca_transform                               3.19   0.31     3.14     3.69
+vitH+_score_loop_numpy                           47.52   3.44    47.03    53.42
+vitH+_score_loop_torch                          364.08  20.55   370.18   395.65
+vitH+_score_batched_torch                        18.73   0.63    18.70    19.84
+vitH+_score_numba_jit                            68.31   3.06    68.38    71.69
+vitH+_gap_maha                                    0.04   0.01     0.04     0.05

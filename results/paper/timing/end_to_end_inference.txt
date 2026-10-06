@@ -1,0 +1,21 @@
+L1-037 timing (NVIDIA GeForce RTX 3080 Ti Laptop GPU, warmup=10, iters=100, median ms/img, B=1)
+[vitL] n_layers=24 n_keep=19
+  full_fp16_features            41.39
+  trunc_fp16_features           33.10
+  trunc_fp16_features_cls       32.79
+  full_fp32_eager_attn          95.74
+  pca_transform                  2.06
+  score_cls_batched_torch       20.30
+  gap_maha                       0.17
+  END_TO_END_DUAL               55.33
+  validation: feat cos=1.000000 cls pearson=0.9999 (min 0.9998) max|diff|=2.83e-04
+[vitH] n_layers=32 n_keep=27
+  full_fp16_features           101.81
+  trunc_fp16_features           86.31
+  trunc_fp16_features_cls       87.85
+  full_fp32_eager_attn         308.08
+  pca_transform                  5.77
+  score_cls_batched_torch       37.06
+  gap_maha                       0.30
+  END_TO_END_DUAL              130.98
+  validation: feat cos=0.999997 cls pearson=1.0000 (min 1.0000) max|diff|=1.61e-04
