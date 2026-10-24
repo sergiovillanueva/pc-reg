@@ -1,0 +1,12 @@
+{
+ "pca_fit_s": 12.144184600008884,
+ "coreset_fit_s": 88.43295809999108,
+ "bank": 275184,
+ "coreset": 27518,
+ "backbone_ms_L1_037": 33.1,
+ "pca_projection_ms_L1_037": 2.06,
+ "nn_scoring_ms_exact_bank": 36.18110000388697,
+ "nn_scoring_ms_coreset": 3.441999986534938,
+ "inference_ms_patchcore_nn": 71.34110000388696,
+ "inference_ms_patchcore_coreset": 38.60199998653494
+}

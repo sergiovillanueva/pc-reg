@@ -1,11 +1,11 @@
 """Per-category image AUROC of every detector and variant in the paper, on the same cached features.
 
 Methods (column `method` of the output, as in results/paper/percat.csv):
-  patchcore_max, patchcore_p95           PatchCore, exact k = 1, image score max or P95       (Table 1)
+  patchcore_max, patchcore_p95           PatchCore-NN, exact k = 1, image score max or P95    (Table 1)
   padim_cal, meansub_cal                 per-position Gaussians, standardized P95              (Table 1)
-  uniform_cal, cls_cal                   PC-Reg and PC-Reg_CLS, standardized P95               (Tables 1, 2)
-  dual_final                             PC-Reg_Dual = 0.5 z(cls_cal) + 0.5 z(quad)            (Tables 1, 2)
-  *_raw, quad, gap, dual_paper, dual_cal+gap, dual_raw+quad, dual_cal+gap+quad, dual_uniform    (Table 2)
+  uniform_cal, cls_cal                   PC-Reg and PC-Reg_CLS, standardized P95               (Tables 1, 4)
+  dual_final                             PC-Reg_Dual = 0.5 z(cls_cal) + 0.5 z(quad)            (Tables 1, 4)
+  *_raw, quad, gap, dual_paper, dual_cal+gap, dual_raw+quad, dual_cal+gap+quad, dual_uniform    (Table 4)
   dual_a0.2, dual_a0.3, dual_a0.7, dual_maxz                                                     (Table A5)
 z-statistics come from the in-sample training scores. Resumable per category.
 

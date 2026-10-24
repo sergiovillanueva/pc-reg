@@ -1,0 +1,11 @@
+backbone;category;n_train;pca;project;regression;quadrants;train_scores;pcreg_dual_fit;patchcore_nn_fit
+vitL;breakfast_box;351;24.94;1.65;30.47;0.46;18.49;76.0;26.6
+vitL;juice_bottle;335;21.01;1.48;28.89;0.47;17.09;68.9;22.5
+vitL;pushpins;372;22.97;1.54;29.32;0.43;19.04;73.3;24.5
+vitL;screw_bag;360;21.88;1.51;28.17;0.41;18.29;70.3;23.4
+vitL;splicing_connectors;360;21.82;1.48;28.21;0.42;18.21;70.1;23.3
+vitH;breakfast_box;351;32.34;2.31;36.24;0.4;24.37;95.7;34.7
+vitH;juice_bottle;335;30.54;2.22;35.34;0.43;23.36;91.9;32.8
+vitH;pushpins;372;35.11;2.44;37.96;0.43;25.96;101.9;37.5
+vitH;screw_bag;360;33.91;2.37;36.96;0.42;25.12;98.8;36.3
+vitH;splicing_connectors;360;34.05;2.45;36.77;0.43;24.66;98.4;36.5

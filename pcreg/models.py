@@ -125,7 +125,7 @@ class QuadrantScore:
 
 
 class GlobalMeanScore:
-    """Ledoit-Wolf Mahalanobis distance of the global mean feature (the 'global mean' rows of Tables 2 and 3)."""
+    """Ledoit-Wolf Mahalanobis distance of the global mean feature (the 'global mean' rows of Tables 3 and 4)."""
 
     def fit(self, train: np.ndarray) -> "GlobalMeanScore":
         self.mu, self.prec = _lw(train.mean(axis=1).astype(np.float64))
@@ -182,7 +182,7 @@ class PerPositionGaussian:
 
 
 class PatchCore:
-    """Exact k = 1 nearest neighbor in the memory bank of all training patches (no coreset), Euclidean distance.
+    """PatchCore-NN of the paper: exact k = 1 nearest neighbor in the memory bank of all training patches (no coreset).
     Image score: maximum over patches (original rule, without the reweighting step) or P95."""
 
     def __init__(self, device: str | None = None):
