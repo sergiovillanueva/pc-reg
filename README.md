@@ -22,8 +22,9 @@ Image AUROC (%), one fixed configuration for all categories, all methods on the 
 
 | Method (ViT-L/16) | LOCO | LOCO log. | LOCO str. | MVTec AD | VisA | All 32 | BTAD |
 |---|---|---|---|---|---|---|---|
-| PatchCore (P95) | 75.4 | 74.4 | 77.9 | 95.5 | 86.5 | 89.0 | 95.8 |
-| PatchCore (max) | 80.4 | 70.4 | 93.6 | 98.7 | 97.7 | 95.5 | 95.5 |
+| PatchCore-NN (P95) | 75.4 | 74.4 | 77.9 | 95.5 | 86.5 | 89.0 | 95.8 |
+| PatchCore-NN (max) | 80.4 | 70.4 | 93.6 | 98.7 | 97.7 | 95.5 | 95.5 |
+| PatchCore (full scoring) | 80.6 | 70.9 | 93.5 | 98.9 | 97.9 | 95.7 | 95.0 |
 | PaDiM | 74.1 | 73.2 | 75.6 | 94.5 | 85.2 | 87.8 | 97.0 |
 | MeanSub | 75.0 | 74.7 | 75.7 | 94.1 | 85.0 | 87.7 | 96.9 |
 | PC-Reg | 81.0 | 82.1 | 80.6 | 96.6 | 87.6 | 90.8 | 97.4 |
@@ -31,7 +32,11 @@ Image AUROC (%), one fixed configuration for all categories, all methods on the 
 | **PC-Reg_Dual** | **85.7** | **85.0** | 87.4 | 98.8 | 92.6 | 94.4 | 96.3 |
 | PC-Reg_Dual (ViT-H+/16) | 87.5 | 88.1 | 87.6 | 99.0 | 93.5 | 95.2 | |
 
-On logical anomalies, PC-Reg_Dual is above PatchCore in all five MVTec LOCO AD categories:
+PatchCore-NN is the controlled nearest-neighbor baseline of the paper (exact search in the memory bank of all training
+patches, image score max or P95); PatchCore (full scoring) adds the coreset subsampling and the reweighting of the
+original method on the same features.
+
+On logical anomalies, PC-Reg_Dual is above PatchCore-NN in all five MVTec LOCO AD categories:
 
 ![Logical anomaly AUROC per category](docs/logical_per_category.png)
 
@@ -40,20 +45,21 @@ On logical anomalies, PC-Reg_Dual is above PatchCore in all five MVTec LOCO AD c
 | Paper | Script | Result file (as reported) |
 |---|---|---|
 | Table 1, Tables A1-A3 (per category), Wilcoxon tests | `scripts/run_main.py` | `results/paper/percat.csv`, `results/paper/wilcoxon.json` |
-| Table 2 (components), Table A5 (fusion weight) | `scripts/run_main.py` | `results/paper/percat.csv` (variant rows) |
+| Table 4 (components), Table A5 (fusion weight) | `scripts/run_main.py` | `results/paper/percat.csv` (variant rows) |
 | Table 3 (feature-space perturbation tests) | research code | `results/paper/perturbation.csv` |
-| Table 5 and Section 5.5 (inference time) | research code | `results/paper/timing/` |
+| Table 8 and Section 5.6 (inference time) | research code | `results/paper/timing/` |
 | Table A4 (design study) | research code | `results/paper/ablation_*.csv` |
-| Table A6, Figure A1 (few training images) | research code | `results/paper/fewshot.csv` |
-| Table A8 (pixel AUROC, AUPRO) | research code | `results/paper/localization.csv` |
+| Table A7, Figure A1 (few training images) | research code | `results/paper/fewshot.csv` |
+| Table A9 (pixel AUROC, AUPRO) | research code | `results/paper/localization.csv` |
+| Revision: PatchCore (full scoring) in Table 1, operating points (Tables 2 and A10), gradient-based predictors (Table 5), selection without the evaluated benchmark (Table 6), cell grids (Table A6), fitting times (Table 8) | research code | `results/revision_1/` (see its README) |
 
-`python scripts/make_tables.py` prints Tables 1, 2, 3, A1-A3, A5 and A6 from these files, and
+`python scripts/make_tables.py` prints Tables 1, 3, 4, A1-A3, A5 and A7 from these files, and
 `python scripts/make_tables.py --compare` compares a fresh run of `scripts/run_main.py` (`results/reproduced/`) with them.
 
 The method names in `percat.csv` are: `dual_final` (PC-Reg_Dual), `cls_cal` (PC-Reg_CLS), `uniform_cal`
 (PC-Reg), `padim_cal`, `meansub_cal`, `patchcore_max`, `patchcore_p95`; the suffix `_raw` marks the variants
 without the per-position standardization, `quad` and `gap` are the quadrant and global-mean scores alone, and
-the other `dual_*` rows are the fusion variants of Tables 2 and A5.
+the other `dual_*` rows are the fusion variants of Tables 4 and A5.
 
 **Reproduction check.** On the cached features of the paper, the reference implementation in `pcreg/` gives the
 AUROC of `results/paper/percat.csv` for all 22 methods and variants of MVTec LOCO AD breakfast_box to within
@@ -91,7 +97,7 @@ python scripts/extract_features.py --dataset all                    # ViT-L/16, 
 python scripts/extract_features.py --dataset loco --backbone vitH   # optional ViT-H+/16, 512 x 512
 
 # 2. detectors and baselines (CPU, resumable per category)
-python scripts/run_main.py                                          # Tables 1, 2, A1-A3, A5
+python scripts/run_main.py                                          # Tables 1, 4, A1-A3, A5
 python scripts/run_main.py --backbone vitH --datasets loco mvtec visa
 
 # 3. tables
@@ -100,7 +106,7 @@ python scripts/make_tables.py --compare
 ```
 
 `scripts/run_main.py` computes PC-Reg, PC-Reg_CLS, PC-Reg_Dual and the baselines for one category in a few
-minutes on a desktop CPU. Fitting PC-Reg_Dual alone takes about two minutes per category.
+minutes on a desktop CPU. Fitting PC-Reg_Dual alone takes about 72 s per category on one CPU core (ViT-L/16).
 
 ## Code
 
@@ -110,7 +116,7 @@ pcreg/
   data.py       image lists per dataset and split; loading of the cached features
   features.py   DINOv3 patch tokens and head-averaged CLS-to-patch attention
   models.py     PCReg (uniform or CLS context), QuadrantScore, PCRegDual, PaDiM / MeanSub
-                (PerPositionGaussian), PatchCore (exact k = 1), AUROC
+                (PerPositionGaussian), PatchCore-NN (class PatchCore, exact k = 1), AUROC
 scripts/        feature extraction, run_main.py (all detectors), make_tables.py
 results/paper/  the result files behind the tables of the paper
 ```

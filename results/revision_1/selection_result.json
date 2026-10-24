@@ -1,0 +1,116 @@
+{
+ "n_candidates": 480,
+ "lobo": {
+  "loco": {
+   "selected": [
+    "R3",
+    "cal_p95",
+    "gap+quad",
+    0.5
+   ],
+   "auroc_selected": 86.16474837119974,
+   "auroc_paper": 85.67618190535583,
+   "rank_paper": 32,
+   "n": 480
+  },
+  "loco_logical": {
+   "selected": [
+    "R3",
+    "cal_p95",
+    "gap+quad",
+    0.5
+   ],
+   "auroc_selected": 85.00220910717701,
+   "auroc_paper": 84.98437280224438
+  },
+  "mvtec": {
+   "selected": [
+    "d384",
+    "cal_p95",
+    "gap+quad",
+    0.5
+   ],
+   "auroc_selected": 98.22104963238296,
+   "auroc_paper": 98.80085960333454,
+   "rank_paper": 54,
+   "n": 480
+  },
+  "visa": {
+   "selected": [
+    "R3",
+    "cal_p95",
+    "gap+quad",
+    0.5
+   ],
+   "auroc_selected": 93.2631188118812,
+   "auroc_paper": 92.6323487348735,
+   "rank_paper": 26,
+   "n": 480
+  },
+  "btad": {
+   "selected": [
+    "R3",
+    "cal_p95",
+    "gap+quad",
+    0.5
+   ],
+   "auroc_selected": 96.31243133228868,
+   "auroc_paper": 96.33910592388467,
+   "rank_paper": 30,
+   "n": 480
+  }
+ },
+ "cv": {
+  "mean": 0.3390373661851464,
+  "p5": -0.3393534735087151,
+  "p95": 0.7048395338863571,
+  "optimism": 0.2051093992187868,
+  "top": [
+   [
+    [
+     "R3",
+     "cal_p95",
+     "gap+quad",
+     0.5
+    ],
+    64.35
+   ],
+   [
+    [
+     "R3",
+     "cal_p95",
+     "quad",
+     0.7
+    ],
+    6.85
+   ],
+   [
+    [
+     "d384",
+     "cal_p95",
+     "quad",
+     0.5
+    ],
+    5.6
+   ],
+   [
+    [
+     "d384",
+     "cal_p95",
+     "gap+quad",
+     0.5
+    ],
+    5.4
+   ],
+   [
+    [
+     "R3",
+     "cal_p95",
+     "gap+quad",
+     0.7
+    ],
+    4.8
+   ]
+  ]
+ }
+}

@@ -15,7 +15,7 @@ from scipy.stats import wilcoxon
 ROOT = Path(__file__).resolve().parents[1]
 RES = ROOT / "results"
 MAIN = ["patchcore_p95", "patchcore_max", "padim_cal", "meansub_cal", "uniform_cal", "cls_cal", "dual_final"]
-NAMES = {"patchcore_p95": "PatchCore (P95)", "patchcore_max": "PatchCore (max)", "padim_cal": "PaDiM",
+NAMES = {"patchcore_p95": "PatchCore-NN (P95)", "patchcore_max": "PatchCore-NN (max)", "padim_cal": "PaDiM",
          "meansub_cal": "MeanSub", "uniform_cal": "PC-Reg", "cls_cal": "PC-Reg_CLS", "dual_final": "PC-Reg_Dual"}
 
 
@@ -69,7 +69,7 @@ def main():
         print(sh.loc[["cls_cal", "dual_final"], [c for c in cols if c in sh]].rename(index=NAMES).round(1).to_string())
     comp = ["uniform_raw", "cls_raw", "uniform_cal", "cls_cal", "quad", "gap", "dual_paper", "dual_raw+quad",
             "dual_cal+gap", "dual_uniform", "dual_cal+gap+quad", "dual_final"]
-    print("\nTable 2 (components) and Table A5 (fusion weight)")
+    print("\nTable 4 (components) and Table A5 (fusion weight)")
     print(s.loc[[m for m in comp + ["dual_a0.7", "dual_a0.3", "dual_a0.2", "dual_maxz"] if m in s.index],
                 ["LOCO", "LOCO log", "MVTec AD", "VisA", "All 32"]].round(1).to_string())
     print("\nPaired tests over the 32 categories (ViT-L/16)")
@@ -83,7 +83,7 @@ def main():
     fs = RES / args.source / "fewshot.csv"
     if fs.exists():
         f = pd.read_csv(fs, sep=";", dtype={"n_train": str})
-        print("\nTable A6: MVTec LOCO AD with N training images (mean over categories and seeds)")
+        print("\nTable A7: MVTec LOCO AD with N training images (mean over categories and seeds)")
         for col in ("auroc", "logical"):
             print(f"  {col}:")
             print((f.groupby(["method", "n_train"])[col].mean().unstack() * 100)[["10", "25", "50", "100", "200", "full"]].round(1).to_string())
