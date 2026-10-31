@@ -5,6 +5,9 @@ Code and results of the paper
 > S. Villanueva López, E. Soria-Olivas, M. Sánchez-Montañés. *PC-Reg: Modeling Spatial Dependencies for
 > Logical Anomaly Detection.* Submitted to *Electronics* (MDPI), 2026.
 
+Release [v1.1](https://github.com/sergiovillanueva/pc-reg/releases/tag/v1.1) is the version of the code and results
+that corresponds to the revised manuscript, including the analyses added during its revision (`results/revision_1/`).
+
 PC-Reg learns from defect-free images how each region of an image relates to its surroundings. A frozen
 DINOv3 backbone provides the patch features; at every position of the feature grid, a closed-form ridge
 regression predicts the patch feature from its attention-weighted neighbors, and the Mahalanobis distance of
@@ -106,7 +109,9 @@ python scripts/make_tables.py --compare
 ```
 
 `scripts/run_main.py` computes PC-Reg, PC-Reg_CLS, PC-Reg_Dual and the baselines for one category in a few
-minutes on a desktop CPU. Fitting PC-Reg_Dual alone takes about 72 s per category on one CPU core (ViT-L/16).
+minutes on a desktop CPU. Fitting PC-Reg_Dual alone takes about 72 s per category on one CPU core with this reference
+implementation (ViT-L/16), and about 5 s on the GPU with the batched implementation used for the timings of the paper
+(`results/revision_1/timing_fit_gpu.csv`).
 
 ## Code
 
