@@ -1,12 +1,21 @@
 # PC-Reg: Modeling Spatial Dependencies for Logical Anomaly Detection
 
+[![Paper](https://img.shields.io/badge/Paper-Electronics%202026-1F3864)](https://doi.org/10.3390/electronics15215109)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+![Python 3.11+](https://img.shields.io/badge/Python-3.11%2B-blue)
+
 Code and results of the paper
 
 > S. Villanueva López, E. Soria-Olivas, M. Sánchez-Montañés. *PC-Reg: Modeling Spatial Dependencies for
-> Logical Anomaly Detection.* Submitted to *Electronics* (MDPI), 2026.
+> Logical Anomaly Detection.* Electronics **15**(21), 5109, 2026.
+> [doi:10.3390/electronics15215109](https://doi.org/10.3390/electronics15215109)
+
+A logical anomaly is a part that looks normal but is in the wrong place, missing or in the wrong number: a connector
+plugged into the wrong slot, two screws where there should be three. Detectors that compare each image patch with a
+memory of good patches miss these, because every patch on its own looks fine.
 
 Release [v1.1](https://github.com/sergiovillanueva/pc-reg/releases/tag/v1.1) is the version of the code and results
-that corresponds to the revised manuscript, including the analyses added during its revision (`results/revision_1/`).
+that corresponds to the published paper, including the analyses added during its revision (`results/revision_1/`).
 
 PC-Reg learns from defect-free images how each region of an image relates to its surroundings. A frozen
 DINOv3 backbone provides the patch features; at every position of the feature grid, a closed-form ridge
@@ -146,3 +155,36 @@ penalty lambda = 1, Ledoit-Wolf covariances, 95th percentile over positions, equ
 with z-statistics from the training scores. The optional ViT-H+/16 uses 512 x 512 inputs (32 x 32 grid).
 
 The experiments of the paper ran on an Intel Core i9 CPU with 32 GB RAM and an NVIDIA RTX 3080 Ti laptop GPU (16 GB).
+
+## Citation
+
+```bibtex
+@article{villanueva2026pcreg,
+  title   = {{PC-Reg}: Modeling Spatial Dependencies for Logical Anomaly Detection},
+  author  = {Villanueva L{\'o}pez, Sergio and Soria-Olivas, Emilio and S{\'a}nchez-Monta{\~n}{\'e}s, Manuel},
+  journal = {Electronics},
+  volume  = {15},
+  number  = {21},
+  pages   = {5109},
+  year    = {2026},
+  doi     = {10.3390/electronics15215109}
+}
+```
+
+## License
+
+MIT. See [LICENSE](LICENSE). The datasets keep their own licenses.
+
+## Related repositories
+
+This repository is one of five from my industrial PhD on anomaly detection for visual inspection (Universitat de València and Eines Vision Systems, 2026). All five work on frozen foundation-model features and do not train a network for each product.
+
+| Repository | Paper | Question |
+|---|---|---|
+| [rgb-ensembles-industrial-uad](https://github.com/sergiovillanueva/rgb-ensembles-industrial-uad) | Electronics, 2026 | Does combining several detectors improve defect localization on a real automotive benchmark? |
+| [GaLAD_Gaussian_layered_AD](https://github.com/sergiovillanueva/GaLAD_Gaussian_layered_AD) | under review | How do you set up a new product from one to five good images and still find small defects? |
+| [memory-pollution-ad](https://github.com/sergiovillanueva/memory-pollution-ad) | MAKE, 2026 | What goes wrong when many products share one memory bank, and how do you fix it? |
+| [patch-purification-fewshot](https://github.com/sergiovillanueva/patch-purification-fewshot) | Electronics, 2026 | What happens if a defective part slips into the reference images at commissioning? |
+| **pc-reg** (this one) | Electronics, 2026 | How do you detect parts that look fine but are missing or in the wrong place? |
+
+Sergio Villanueva López · [LinkedIn](https://www.linkedin.com/in/sergiovillanuevalopez)
