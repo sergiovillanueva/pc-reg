@@ -1,7 +1,7 @@
 # PC-Reg: Modeling Spatial Dependencies for Logical Anomaly Detection
 
 [![Paper](https://img.shields.io/badge/Paper-Electronics%202026-1F3864)](https://doi.org/10.3390/electronics15215109)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![License: non-commercial, Eines](https://img.shields.io/badge/License-non--commercial%20%C2%B7%20Eines-red.svg)](LICENSE)
 ![Python 3.11+](https://img.shields.io/badge/Python-3.11%2B-blue)
 
 Code and results of the paper
@@ -173,7 +173,11 @@ The experiments of the paper ran on an Intel Core i9 CPU with 32 GB RAM and an N
 
 ## License
 
-MIT. See [LICENSE](LICENSE). The datasets keep their own licenses.
+Copyright (c) 2026 Eines Systems S.L.U. (Eines Vision Systems). The code was developed at
+Eines Vision Systems within an industrial PhD with the Universitat de València. It may be
+used for non-commercial research and teaching and to reproduce the results of the paper.
+Commercial use requires prior written permission from Eines. See [LICENSE](LICENSE).
+The datasets keep their own licenses.
 
 ## Related repositories
 
