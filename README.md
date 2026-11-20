@@ -173,10 +173,11 @@ The experiments of the paper ran on an Intel Core i9 CPU with 32 GB RAM and an N
 
 ## License
 
-Copyright (c) 2026 Eines Systems S.L.U. (Eines Vision Systems). The code was developed at
-Eines Vision Systems within an industrial PhD with the Universitat de València. It may be
-used for non-commercial research and teaching and to reproduce the results of the paper.
-Commercial use requires prior written permission from Eines. See [LICENSE](LICENSE).
+Code written by Sergio Villanueva López at Eines Vision Systems, within an industrial PhD
+with the Universitat de València. The code belongs to Eines: copyright (c) 2026 Eines
+Systems S.L.U. It may be used for non-commercial research and teaching and to reproduce the
+results of the paper. Commercial use requires prior written permission from Eines. See
+[LICENSE](LICENSE).
 The datasets keep their own licenses.
 
 ## Related repositories
